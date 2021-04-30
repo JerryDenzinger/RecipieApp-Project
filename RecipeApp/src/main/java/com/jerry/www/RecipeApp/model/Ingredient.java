@@ -18,8 +18,10 @@ public class Ingredient {
 
 	private String description;
 	private BigDecimal amount;
+	
 	@OneToOne(fetch = FetchType.EAGER)
 	private UnitOfMesure uom;
+	
 	@ManyToOne
 	private Recipe recipe;
 

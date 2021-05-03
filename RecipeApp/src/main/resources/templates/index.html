@@ -5,6 +5,19 @@
     <title>Recipe App Home</title>
 </head>
 <body>
-    <h1 th:text="'My Recipes'">Home......</h1>  
+    <h1 th:text="'My Recipes'">Home......</h1>
+    <table id="recipes">
+    <tr>
+    	<th>Id</th>
+    	<th>Description</th>
+    	<th>Directions</th>
+    </tr>
+    <tr th:each="recipe : ${recipes}">
+    	<td th:text="${recipe.id}">...</td>
+    	<td th:text="${recipe.description}">...</td>
+    	<td th:text="${recipe.directions}">...</td>
+    </tr>
+    
+    </table>
 </body>
 </html>

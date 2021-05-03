@@ -1,4 +1,4 @@
-package repositories;
+package com.jerry.www.RecipeApp.repositories;
 
 import java.util.Optional;
 

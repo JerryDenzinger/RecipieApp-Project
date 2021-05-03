@@ -1,16 +1,14 @@
-package controllers;
+package com.jerry.www.RecipeApp.controllers;
 
 import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.jerry.www.RecipeApp.model.Category;
 import com.jerry.www.RecipeApp.model.UnitOfMesure;
-
-import repositories.CategoryRepository;
-import repositories.UnitOfMesureRepository;
+import com.jerry.www.RecipeApp.repositories.CategoryRepository;
+import com.jerry.www.RecipeApp.repositories.UnitOfMesureRepository;
 
 @Controller
 public class IndexController {
@@ -35,7 +33,7 @@ public class IndexController {
 		return "index";
 	}
 	
-	@RequestMapping("/test")
+	@RequestMapping({"/test","test"})
 	public String getTest() {
 		System.out.println("----------------Test-------------");
 		return "test";

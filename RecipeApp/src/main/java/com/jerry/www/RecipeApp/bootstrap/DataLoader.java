@@ -19,6 +19,9 @@ import com.jerry.www.RecipeApp.repositories.CategoryRepository;
 import com.jerry.www.RecipeApp.repositories.RecipeRepository;
 import com.jerry.www.RecipeApp.repositories.UnitOfMesureRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -40,6 +43,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 	}
 
 	private List<Recipe> getRecipes() {
+		log.debug("Retriving Recipies From Data loader......");
 
 		List<Recipe> recipes = new ArrayList<>(2);
 

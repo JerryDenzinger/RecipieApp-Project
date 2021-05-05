@@ -15,7 +15,7 @@ import org.mockito.MockitoAnnotations;
 import com.jerry.www.RecipeApp.model.Recipe;
 import com.jerry.www.RecipeApp.repositories.RecipeRepository;
 
-class RecipeServiceImplTest {
+ public class RecipeServiceImplTest {
 
 	RecipeServiceImpl recipeService;
 	

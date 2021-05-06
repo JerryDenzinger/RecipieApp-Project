@@ -7,13 +7,15 @@
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
 	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-	crossorigin="anonymous">
+	crossorigin="anonymous" th:ref="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}">
+	
+<script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
 
 <!-- Latest compiled and minified JavaScript -->
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
 	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-	crossorigin="anonymous"></script>
+	crossorigin="anonymous" th:ref="@{/webjars/bootstrap/4.6.0/js/bootstrap.min.js}"></script>
 </head>
 <body>
 	<div class="container-fluid" style="margin-top: 20px">
@@ -34,19 +36,19 @@
 								</tr>
 								</thead>
 								<tr th:remove="all">
-									<td th:text="${recipe.id}">Test for CSS1...Id</td>
-									<td th:text="${recipe.description}">Test for CSS1...Description</td>
-									<td th:text="${recipe.directions}">Test for CSS1...Directions</td>
+									<td>Test for CSS1...Id</td>
+									<td>Test for CSS1...Description</td>
+									<td>Test for CSS1...Directions</td>
 								</tr>
 								<tr th:remove="all">
-									<td th:text="${recipe.id}">Test for CSS2...Id</td>
-									<td th:text="${recipe.description}">Test for CSS2...Description</td>
-									<td th:text="${recipe.directions}">Test for CSS2...Directions</td>
+									<td>Test for CSS2...Id</td>
+									<td>Test for CSS2...Description</td>
+									<td>Test for CSS2...Directions</td>
 								</tr>
 								<tr th:each="recipe : ${recipes}">
 									<td th:text="${recipe.id}">...</td>
 									<td th:text="${recipe.description}">...</td>
-									<td th:text="${recipe.directions}">...</td>
+									<td><a href="#" th:ref="@{'/recipe/show/' + ${recipe.id}}">View</a></td>
 								</tr>
 							</table>
 						</div>

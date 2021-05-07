@@ -102,7 +102,7 @@
 										<li>1 Teaspoon of Sugar</li>
 									</ul>
 									<ul th:each="ingredient : ${recipe.ingredients}" >
-										<li th:text="${ingredient.getAmount()} + ' -- ' +${ingredient.getUom().description} + '  ' + ${ingredient.getDescription()}  " ></li>
+										<li th:text="${ingredient.getAmount()} + ' -- ' +${ingredient.getUnitOfMeasure().description} + '  ' + ${ingredient.getDescription()}  " ></li>
 									</ul>
 								</div>
 							</div>

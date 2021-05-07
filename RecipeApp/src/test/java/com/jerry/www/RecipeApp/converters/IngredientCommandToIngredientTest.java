@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.jerry.www.RecipeApp.commands.IngredientCommand;
+import com.jerry.www.RecipeApp.commands.UnitOfMeasureCommand;
 import com.jerry.www.RecipeApp.model.Ingredient;
 import com.jerry.www.RecipeApp.model.Recipe;
 
@@ -22,44 +23,60 @@ class IngredientCommandToIngredientTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		converter = new IngredientCommandToIngredient();
+		converter = new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure());
 	}
 
 	@Test
 	void nullParameterTest() throws Exception {
 		assertNull(converter.convert(null));
 	}
-	
+
 	@Test
 	void emptyObjectTest() throws Exception {
 		assertNotNull(converter.convert(new IngredientCommand()));
 	}
-	
+
 	@Test
-	void converterTest() throws Exception {
-		//given 
+	public void convert() throws Exception {
+		// given
 		IngredientCommand command = new IngredientCommand();
 		command.setId(ID_VALUE);
-		command.setDescription(DESCRIPTION);
 		command.setAmount(AMOUNT);
-		command.setRecipe(RECIPE);
-		//command.setUom(null);
-		
-		//when 
+		command.setDescription(DESCRIPTION);
+		UnitOfMeasureCommand unitOfMeasureCommand = new UnitOfMeasureCommand();
+		unitOfMeasureCommand.setId(UOM_ID);
+		command.setUnitOfMeasure(unitOfMeasureCommand);
+
+		// when
 		Ingredient ingredient = converter.convert(command);
-		
-		//then 
+
+		// then
 		assertNotNull(ingredient);
+		assertNotNull(ingredient.getUnitOfMeasure());
 		assertEquals(ID_VALUE, ingredient.getId());
-		assertEquals(DESCRIPTION, ingredient.getDescription());
-		assertEquals(RECIPE,ingredient.getRecipe());
 		assertEquals(AMOUNT, ingredient.getAmount());
-		//assertEquals(UOM_ID, ingredient.getUom().getId());
-		
+		assertEquals(DESCRIPTION, ingredient.getDescription());
+		assertEquals(UOM_ID, ingredient.getUnitOfMeasure().getId());
 	}
 
 	@Test
-	void converterWithNullUOMTest() throws Exception {
-		fail("Not yet implemented");
+	public void convertWithNullUOM() throws Exception {
+		// given
+		IngredientCommand command = new IngredientCommand();
+		command.setId(ID_VALUE);
+		command.setAmount(AMOUNT);
+		command.setDescription(DESCRIPTION);
+		UnitOfMeasureCommand unitOfMeasureCommand = new UnitOfMeasureCommand();
+
+		// when
+		Ingredient ingredient = converter.convert(command);
+
+		// then
+		assertNotNull(ingredient);
+		assertNull(ingredient.getUnitOfMeasure());
+		assertEquals(ID_VALUE, ingredient.getId());
+		assertEquals(AMOUNT, ingredient.getAmount());
+		assertEquals(DESCRIPTION, ingredient.getDescription());
+
 	}
 }

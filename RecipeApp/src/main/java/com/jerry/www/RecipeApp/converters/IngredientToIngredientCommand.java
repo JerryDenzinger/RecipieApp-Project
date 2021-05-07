@@ -14,21 +14,27 @@ import lombok.Synchronized;
 @Component
 public class IngredientToIngredientCommand implements Converter<Ingredient, IngredientCommand> {
 
-	@Synchronized
-	@Nullable
-	@Override
-	public IngredientCommand convert(Ingredient source) {
-		if (source == null) {
-		return null;
-	}
-	final IngredientCommand  ingredientCom = new IngredientCommand();
-	ingredientCom.setId(source.getId());
-	ingredientCom.setDescription(source.getDescription());
-	ingredientCom.setAmount(source.getAmount());
-	ingredientCom.setRecipe(source.getRecipe());
-	ingredientCom.setUom(source.getUom());
-	return ingredientCom;
-	}
+    private final UnitOfMeasureToUnitOfMeasureCommand uomConverter;
+
+    public IngredientToIngredientCommand(UnitOfMeasureToUnitOfMeasureCommand uomConverter) {
+        this.uomConverter = uomConverter;
+    }
+
+    @Synchronized
+    @Nullable
+    @Override
+    public IngredientCommand convert(Ingredient ingredient) {
+        if (ingredient == null) {
+            return null;
+        }
+
+        IngredientCommand ingredientCommand = new IngredientCommand();
+        ingredientCommand.setId(ingredient.getId());
+        ingredientCommand.setAmount(ingredient.getAmount());
+        ingredientCommand.setDescription(ingredient.getDescription());
+        ingredientCommand.setUnitOfMeasure(uomConverter.convert(ingredient.getUnitOfMeasure()));
+        return ingredientCommand;
+    }
 
 	@Override
 	public JavaType getInputType(TypeFactory typeFactory) {

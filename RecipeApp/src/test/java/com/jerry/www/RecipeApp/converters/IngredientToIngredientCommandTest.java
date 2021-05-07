@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import com.jerry.www.RecipeApp.commands.IngredientCommand;
 import com.jerry.www.RecipeApp.model.Ingredient;
 import com.jerry.www.RecipeApp.model.Recipe;
+import com.jerry.www.RecipeApp.model.UnitOfMeasure;
 
 class IngredientToIngredientCommandTest {
 	public static final Recipe RECIPE = new Recipe();
@@ -22,44 +23,59 @@ class IngredientToIngredientCommandTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		converter = new IngredientToIngredientCommand();
+		converter = new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand());
 	}
 
 	@Test
 	void nullParameterTest() throws Exception {
 		assertNull(converter.convert(null));
 	}
-	
+
 	@Test
 	void emptyObjectTest() throws Exception {
 		assertNotNull(converter.convert(new Ingredient()));
 	}
-	
+
 	@Test
-	void converterTest() throws Exception {
-		//given 
+	public void testConvertNullUOM() throws Exception {
+		// given
 		Ingredient ingredient = new Ingredient();
 		ingredient.setId(ID_VALUE);
-		ingredient.setDescription(DESCRIPTION);
-		ingredient.setAmount(AMOUNT);
 		ingredient.setRecipe(RECIPE);
-		//ingredient.setUom();
-		
-		//when 
-		IngredientCommand command = converter.convert(ingredient);
-		
-		//then 
-		assertNotNull(command);
-		assertEquals(ID_VALUE, command.getId());
-		assertEquals(DESCRIPTION, command.getDescription());
-		assertEquals(RECIPE,command.getRecipe());
-		assertEquals(AMOUNT, command.getAmount());
-		//assertEquals(UOM_ID, ingredient.getUom().getId());
-		
+		ingredient.setAmount(AMOUNT);
+		ingredient.setDescription(DESCRIPTION);
+		ingredient.setUnitOfMeasure(null);
+		// when
+		IngredientCommand ingredientCommand = converter.convert(ingredient);
+		// then
+		assertNull(ingredientCommand.getUnitOfMeasure());
+		assertEquals(ID_VALUE, ingredientCommand.getId());
+		// assertEquals(RECIPE, ingredientCommand.get);
+		assertEquals(AMOUNT, ingredientCommand.getAmount());
+		assertEquals(DESCRIPTION, ingredientCommand.getDescription());
 	}
 
 	@Test
-	void converterWithNullUOMTest() throws Exception {
-		fail("Not yet implemented");
+	public void testConvertWithUom() throws Exception {
+		// given
+		Ingredient ingredient = new Ingredient();
+		ingredient.setId(ID_VALUE);
+		ingredient.setRecipe(RECIPE);
+		ingredient.setAmount(AMOUNT);
+		ingredient.setDescription(DESCRIPTION);
+
+		UnitOfMeasure uom = new UnitOfMeasure();
+		uom.setId(UOM_ID);
+
+		ingredient.setUnitOfMeasure(uom);
+		// when
+		IngredientCommand ingredientCommand = converter.convert(ingredient);
+		// then
+		assertEquals(ID_VALUE, ingredientCommand.getId());
+		assertNotNull(ingredientCommand.getUnitOfMeasure());
+		assertEquals(UOM_ID, ingredientCommand.getUnitOfMeasure().getId());
+		// assertEquals(RECIPE, ingredientCommand.get);
+		assertEquals(AMOUNT, ingredientCommand.getAmount());
+		assertEquals(DESCRIPTION, ingredientCommand.getDescription());
 	}
 }

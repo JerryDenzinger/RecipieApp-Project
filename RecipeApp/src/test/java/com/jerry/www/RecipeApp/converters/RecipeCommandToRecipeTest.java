@@ -1,18 +1,18 @@
 package com.jerry.www.RecipeApp.converters;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import com.jerry.www.RecipeApp.commands.CategoryCommand;
+import com.jerry.www.RecipeApp.commands.IngredientCommand;
+import com.jerry.www.RecipeApp.commands.NotesCommand;
 import com.jerry.www.RecipeApp.commands.RecipeCommand;
 import com.jerry.www.RecipeApp.model.Difficulty;
 import com.jerry.www.RecipeApp.model.Recipe;
 
 
 class RecipeCommandToRecipeTest {
-	public static final Long LONG_VALUE = 1L;
+	public static final Long RECIPE_ID = 1L;
 	public static final String DESCRIPTION = "description";
 	public static final Integer PREP_TIME = 10;
 	public static final Integer COOK_TIME = 10;
@@ -20,17 +20,21 @@ class RecipeCommandToRecipeTest {
 	public static final String SOURCE = "Source";
 	public static final String URL = "Url";
 	public static final String DIRECTIONS = "Directions";
-	//public static final Set<IngredientCommand> INGREDIENTS = new Recipe().getIngredients();
-	//public static final Byte[] IMAGE = new Byte[];
-	public static final Difficulty DIFFICULTY = new Recipe().getDifficulty();
-	//public static final NotesCommand NOTES = new Recipe().getNotes();
-	//public static final Set<CategoryCommand> CATEGORY = new Recipe().getCategories() ;
+	public static final Difficulty DIFFICULTY = Difficulty.EASY;
+	public static final Long CAT_ID_1 = 1L;
+	public static final Long CAT_ID_2 = 2L;
+	public static final Long INGRED_ID_1 = 3L;
+	public static final Long INGRED_ID_2 = 4L;
+	public static final Long NOTES_ID = 9L;
+
 	
 	RecipeCommandToRecipe converter;
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		converter = new RecipeCommandToRecipe();
+		converter = new RecipeCommandToRecipe(new CategoryCommandToCategory(),
+                new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure()),
+                new NotesCommandToNotes());
 	}
 
 	@Test
@@ -47,7 +51,7 @@ class RecipeCommandToRecipeTest {
 	public void converterTest() throws Exception {
 		// given
 		RecipeCommand command = new RecipeCommand();
-		command.setId(LONG_VALUE);
+		command.setId(RECIPE_ID);
 		command.setDescription(DESCRIPTION);
 		command.setPrepTime(PREP_TIME);
 		command.setCookTime(COOK_TIME);
@@ -55,28 +59,48 @@ class RecipeCommandToRecipeTest {
 		command.setSource(SOURCE);
 		command.setUrl(URL);
 		command.setDirections(DIRECTIONS);
-		//command.setIngredients(INGREDIENTS);
-		//command.setImage(null);
 		command.setDifficulty(DIFFICULTY);
-		//command.setNotes(NOTES);
-		//command.setCategories(null);
+		
+		NotesCommand notesCom = new NotesCommand();
+		notesCom.setId(NOTES_ID);
+		
+		command.setNotes(notesCom);
+		
+		CategoryCommand categoryCom = new CategoryCommand();
+		categoryCom.setId(CAT_ID_1);
+		CategoryCommand categoryCom2 = new CategoryCommand();
+		categoryCom2.setId(CAT_ID_2);
+		
+		command.getCategories().add(categoryCom);
+		command.getCategories().add(categoryCom2);
+		
+		IngredientCommand ingredientCom = new IngredientCommand();
+		ingredientCom.setId(INGRED_ID_1);
+		IngredientCommand ingredientCom2 = new IngredientCommand();
+		ingredientCom2.setId(INGRED_ID_2);
+		
+		command.getIngredients().add(ingredientCom);
+		command.getIngredients().add(ingredientCom2);
+
 
 		// when
 		Recipe recipe = converter.convert(command);
 
 		// then
 		assertNotNull(recipe);
-		assertEquals(LONG_VALUE, recipe.getId());
+		assertEquals(RECIPE_ID, recipe.getId());
 		assertEquals(DESCRIPTION, recipe.getDescription());
 		assertEquals(PREP_TIME, recipe.getPrepTime());
 		assertEquals(COOK_TIME, recipe.getCookTime());
 		assertEquals(SERVINGS, recipe.getServings());
 		assertEquals(SOURCE, recipe.getSource());
 		assertEquals(URL, recipe.getUrl());
-		assertEquals(DIRECTIONS, recipe.getDescription());
-		assertEquals(DIFFICULTY, recipe.getDescription());
+		assertEquals(DIRECTIONS, recipe.getDirections());
+		assertEquals(DIFFICULTY, recipe.getDifficulty());
 		assertEquals(DESCRIPTION, recipe.getDescription());
-		
+		assertEquals(NOTES_ID, recipe.getNotes().getId());
+        assertEquals(2, recipe.getCategories().size());
+        assertEquals(2, recipe.getIngredients().size());
 
 	}
 

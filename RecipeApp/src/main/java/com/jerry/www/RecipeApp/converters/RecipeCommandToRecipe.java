@@ -14,6 +14,17 @@ import lombok.Synchronized;
 @Component
 public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
 
+    private final CategoryCommandToCategory categoryConveter;
+    private final IngredientCommandToIngredient ingredientConverter;
+    private final NotesCommandToNotes notesConverter;
+
+    public RecipeCommandToRecipe(CategoryCommandToCategory categoryConveter, IngredientCommandToIngredient ingredientConverter,
+                                 NotesCommandToNotes notesConverter) {
+        this.categoryConveter = categoryConveter;
+        this.ingredientConverter = ingredientConverter;
+        this.notesConverter = notesConverter;
+    }
+
 	@Synchronized
 	@Nullable
 	@Override
@@ -21,21 +32,30 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
 		if (source == null) {
 			return null;
 		}
-		final Recipe recipe = new Recipe();
-		recipe.setId(source.getId());
-		recipe.setDescription(source.getDescription());
-		recipe.setPrepTime(source.getPrepTime());
-		recipe.setCookTime(source.getCookTime());
-		recipe.setServings(source.getServings());
-		recipe.setSource(source.getSource());
-		recipe.setUrl(source.getUrl());
-		recipe.setDirections(source.getDirections());
-		//recipe.setIngredients(new IngredientCommandToIngredient().convert(source.getIngredients());
-		recipe.setImage(source.getImage());
-		recipe.setDifficulty(source.getDifficulty());
-		recipe.setNotes(new NotesCommandToNotes().convert(source.getNotes()));
-		return recipe;
-	}
+        final Recipe recipe = new Recipe();
+        recipe.setId(source.getId());
+        recipe.setCookTime(source.getCookTime());
+        recipe.setPrepTime(source.getPrepTime());
+        recipe.setDescription(source.getDescription());
+        recipe.setDifficulty(source.getDifficulty());
+        recipe.setDirections(source.getDirections());
+        recipe.setServings(source.getServings());
+        recipe.setSource(source.getSource());
+        recipe.setUrl(source.getUrl());
+        recipe.setNotes(notesConverter.convert(source.getNotes()));
+
+        if (source.getCategories() != null && source.getCategories().size() > 0){
+            source.getCategories()
+                    .forEach( category -> recipe.getCategories().add(categoryConveter.convert(category)));
+        }
+
+        if (source.getIngredients() != null && source.getIngredients().size() > 0){
+            source.getIngredients()
+                    .forEach(ingredient -> recipe.getIngredients().add(ingredientConverter.convert(ingredient)));
+        }
+
+        return recipe;
+    }
 
 	@Override
 	public JavaType getInputType(TypeFactory typeFactory) {

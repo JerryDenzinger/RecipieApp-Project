@@ -11,8 +11,7 @@ import com.jerry.www.RecipeApp.model.Recipe;
 
 class NotesCommandToNotesTest {
 	public static final Long LONG_VALUE = 1L;
-	public static final Recipe RECIPE = new Recipe();
-	public static final Notes RECIPE_NOTES = new Recipe().getNotes();
+	public static final String RECIPE_NOTES = "Notes";
 
 	NotesCommandToNotes converter;
 
@@ -35,9 +34,8 @@ class NotesCommandToNotesTest {
 	public void converterTest() throws Exception {
 		// given
 		NotesCommand command = new NotesCommand();
-		command.setId(null);
-		command.setRecipe(null);
-		command.setRecipeNotes(null);
+		command.setId(LONG_VALUE);
+		command.setRecipeNotes(RECIPE_NOTES);
 
 		// when
 		Notes notes = converter.convert(command);
@@ -45,7 +43,6 @@ class NotesCommandToNotesTest {
 		// then
 		assertNotNull(notes);
 		assertEquals(LONG_VALUE, notes.getId());
-		assertEquals(RECIPE, notes.getRecipe());
 		assertEquals(RECIPE_NOTES, notes.getRecipeNotes());
 
 	}

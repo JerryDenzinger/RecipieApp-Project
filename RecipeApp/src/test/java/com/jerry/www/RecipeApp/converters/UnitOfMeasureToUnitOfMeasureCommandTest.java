@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.jerry.www.RecipeApp.commands.UnitOfMesureCommand;
-import com.jerry.www.RecipeApp.model.UnitOfMesure;
+import com.jerry.www.RecipeApp.commands.UnitOfMeasureCommand;
+import com.jerry.www.RecipeApp.model.UnitOfMeasure;
 
 class UnitOfMeasureToUnitOfMeasureCommandTest {
 	public static final String DESCRIPTION = "description";
@@ -26,18 +26,18 @@ class UnitOfMeasureToUnitOfMeasureCommandTest {
 
 	@Test
 	public void emptyObjectTest() throws Exception {
-		assertNotNull(converter.convert(new UnitOfMesure()));
+		assertNotNull(converter.convert(new UnitOfMeasure()));
 	}
 	
 	@Test
 	public void converterTest() throws Exception {
 		//given 
-		UnitOfMesure uom = new UnitOfMesure();
+		UnitOfMeasure uom = new UnitOfMeasure();
 		uom.setId(LONG_VALUE);
 		uom.setDescription(DESCRIPTION);
 		
 		//when 
-		UnitOfMesureCommand command = converter.convert(uom);
+		UnitOfMeasureCommand command = converter.convert(uom);
 		
 		//then 
 		assertNotNull(command);

@@ -12,14 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.jerry.www.RecipeApp.repositories.UnitOfMesureRepository;
+import com.jerry.www.RecipeApp.repositories.UnitOfMeasureRepository;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class UnitOfMesureTest {
+public class UnitOfMeasureTest {
 	
 	@Autowired
-	UnitOfMesureRepository unitOfMesureRepository;
+	UnitOfMeasureRepository unitOfMesureRepository;
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -29,14 +29,14 @@ public class UnitOfMesureTest {
 
 	@Test
 	void findByDescription() {
-		Optional<UnitOfMesure> uomOptional = unitOfMesureRepository.findByDescription("Teaspoon");
+		Optional<UnitOfMeasure> uomOptional = unitOfMesureRepository.findByDescription("Teaspoon");
 		
 		assertEquals("Teaspoon", uomOptional.get().getDescription());
 	}
 	
 	@Test
 	void findByDescriptionCup() {
-		Optional<UnitOfMesure> uomOptional = unitOfMesureRepository.findByDescription("Cup");
+		Optional<UnitOfMeasure> uomOptional = unitOfMesureRepository.findByDescription("Cup");
 		
 		assertEquals("Cup", uomOptional.get().getDescription());
 	}

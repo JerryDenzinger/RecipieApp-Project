@@ -5,23 +5,23 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.Converter;
-import com.jerry.www.RecipeApp.commands.UnitOfMesureCommand;
-import com.jerry.www.RecipeApp.model.UnitOfMesure;
+import com.jerry.www.RecipeApp.commands.UnitOfMeasureCommand;
+import com.jerry.www.RecipeApp.model.UnitOfMeasure;
 import com.sun.istack.Nullable;
 
 import lombok.Synchronized;
 
 @Component
-public class UnitOfMeasureCommandToUnitOfMeasure implements Converter<UnitOfMesureCommand, UnitOfMesure> {
+public class UnitOfMeasureCommandToUnitOfMeasure implements Converter<UnitOfMeasureCommand, UnitOfMeasure> {
 	
 	@Synchronized
 	@Nullable
 	@Override
-	public UnitOfMesure convert(UnitOfMesureCommand source) {
+	public UnitOfMeasure convert(UnitOfMeasureCommand source) {
 		if (source == null) {
 			return null;
 		}
-		final UnitOfMesure uom = new UnitOfMesure();
+		final UnitOfMeasure uom = new UnitOfMeasure();
 		uom.setId(source.getId());
 		uom.setDescription(source.getDescription());
 		return uom;

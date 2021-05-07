@@ -9,8 +9,9 @@ import com.jerry.www.RecipeApp.commands.UnitOfMesureCommand;
 import com.jerry.www.RecipeApp.model.UnitOfMesure;
 
 class UnitOfMeasureCommandToUnitOfMeasureTest {
-	public static final String DESCRIPTION = "description";
 	public static final Long LONG_VALUE = 1L;
+	public static final String DESCRIPTION = "description";
+	
 
 	UnitOfMeasureCommandToUnitOfMeasure converter;
 
@@ -30,7 +31,7 @@ class UnitOfMeasureCommandToUnitOfMeasureTest {
 	}
 
 	@Test
-	public void onverterTest() throws Exception {
+	public void converterTest() throws Exception {
 		//given 
 		UnitOfMesureCommand command = new UnitOfMesureCommand();
 		command.setId(LONG_VALUE);

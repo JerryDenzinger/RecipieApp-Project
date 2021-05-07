@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.jerry.www.RecipeApp.commands.IngredientCommand;
+import com.jerry.www.RecipeApp.model.Ingredient;
 import com.jerry.www.RecipeApp.model.Recipe;
 
 class IngredientCommandToIngredientTest {
@@ -24,17 +26,36 @@ class IngredientCommandToIngredientTest {
 	}
 
 	@Test
-	void nullObjectTest() throws Exception {
+	void nullParameterTest() throws Exception {
+		assertNull(converter.convert(null));
 	}
 	
 	@Test
 	void emptyObjectTest() throws Exception {
-		fail("Not yet implemented");
+		assertNotNull(converter.convert(new IngredientCommand()));
 	}
 	
 	@Test
 	void converterTest() throws Exception {
-		fail("Not yet implemented");
+		//given 
+		IngredientCommand command = new IngredientCommand();
+		command.setId(ID_VALUE);
+		command.setDescription(DESCRIPTION);
+		command.setAmount(AMOUNT);
+		command.setRecipe(RECIPE);
+		//command.setUom(null);
+		
+		//when 
+		Ingredient ingredient = converter.convert(command);
+		
+		//then 
+		assertNotNull(ingredient);
+		assertEquals(ID_VALUE, ingredient.getId());
+		assertEquals(DESCRIPTION, ingredient.getDescription());
+		assertEquals(RECIPE,ingredient.getRecipe());
+		assertEquals(AMOUNT, ingredient.getAmount());
+		//assertEquals(UOM_ID, ingredient.getUom().getId());
+		
 	}
 
 	@Test

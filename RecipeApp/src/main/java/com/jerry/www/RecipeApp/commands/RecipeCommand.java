@@ -16,7 +16,7 @@ public class RecipeCommand {
 	private Long id;
 	private String description;
 	private Integer prepTime;
-	private Integer ccokTime;
+	private Integer cookTime;
 	private Integer servings;
 	private String source;
 	private String url;

@@ -3,11 +3,16 @@ package com.jerry.www.RecipeApp.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.jerry.www.RecipeApp.commands.IngredientCommand;
+import com.jerry.www.RecipeApp.model.UnitOfMeasure;
 import com.jerry.www.RecipeApp.service.IngredientService;
 import com.jerry.www.RecipeApp.service.RecipeService;
+import com.jerry.www.RecipeApp.service.UnitOfMeasureService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,12 +21,17 @@ import lombok.extern.slf4j.Slf4j;
 public class IngredientController {
 	private final RecipeService recipeService;
 	private final IngredientService ingredientService;
+	private final UnitOfMeasureService unitOfMeasureService; 
 
-	public IngredientController(RecipeService recipeService, IngredientService ingredientService) {
+
+	
+	public IngredientController(RecipeService recipeService, IngredientService ingredientService,
+			UnitOfMeasureService unitOfMeasureService) {
 		this.recipeService = recipeService;
 		this.ingredientService = ingredientService;
+		this.unitOfMeasureService = unitOfMeasureService;
 	}
-	
+
 	@GetMapping
 	@RequestMapping("recipe/{id}/ingredients")
 	public String getListOfIngredients(@PathVariable String id,Model model) {
@@ -33,14 +43,41 @@ public class IngredientController {
 		return "recipe/ingredient/list";
 	}
 	
+	@GetMapping
 	@RequestMapping("recipe/{recipeId}/ingredient/{ingredientId}/show")
 	public String getIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model){
-		log.debug("Showing ingredient with Id = " + ingredientId + " from recipe with id" + recipeId);
+		log.debug("Showing ingredient with Id = " + ingredientId + " from recipe with id " + recipeId);
 		
-		// use command object to avoid lazy load errors in thymeleaf
 		model.addAttribute("ingredient",ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(ingredientId)));
 		
 		return "recipe/ingredient/show";
+	}
+	
+	@GetMapping
+	@RequestMapping("recipe/{recipeId}/ingredient/{ingredientId}/update")
+	public String updateIgredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model){
+		log.debug("Update ingredient with Id = " + ingredientId + " from recipe with id " + recipeId);
+		
+		model.addAttribute("ingredient" , ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId),Long.valueOf(ingredientId)));
+		
+		model.addAttribute("uomList",unitOfMeasureService.listAllUoms());
+		
+		return "recipe/ingredient/ingredientform";
+		
+		
+	}
+	
+	@PostMapping
+	@RequestMapping("recipe/{recipeId}/ingredient")
+	public String saveOrUpdate(@ModelAttribute IngredientCommand command) {
+		IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
+		
+		log.debug("Saved recipe id: " + savedCommand.getRecipeId());
+		log.debug("Saved ingredient id: " + savedCommand.getId());
+		
+		return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredient/" + savedCommand.getId() + "/show";
+		
+		
 	}
 	
 	

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.jerry.www.RecipeApp.commands.IngredientCommand;
-import com.jerry.www.RecipeApp.model.UnitOfMeasure;
 import com.jerry.www.RecipeApp.service.IngredientService;
 import com.jerry.www.RecipeApp.service.RecipeService;
 import com.jerry.www.RecipeApp.service.UnitOfMeasureService;
@@ -50,6 +49,7 @@ public class IngredientController {
 		
 		model.addAttribute("ingredient",ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(ingredientId)));
 		
+		
 		return "recipe/ingredient/show";
 	}
 	
@@ -67,18 +67,15 @@ public class IngredientController {
 		
 	}
 	
-	@PostMapping
-	@RequestMapping("recipe/{recipeId}/ingredient")
-	public String saveOrUpdate(@ModelAttribute IngredientCommand command) {
-		IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
-		
-		log.debug("Saved recipe id: " + savedCommand.getRecipeId());
-		log.debug("Saved ingredient id: " + savedCommand.getId());
-		
-		return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredient/" + savedCommand.getId() + "/show";
-		
-		
-	}
+    @PostMapping("recipe/{recipeId}/ingredient")
+    public String saveOrUpdate(@ModelAttribute IngredientCommand command){
+        IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
+
+        log.debug("saved receipe id:" + savedCommand.getRecipeId());
+        log.debug("saved ingredient id:" + savedCommand.getId());
+
+        return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredient/" + savedCommand.getId() + "/show";
+    }
 	
 	
 

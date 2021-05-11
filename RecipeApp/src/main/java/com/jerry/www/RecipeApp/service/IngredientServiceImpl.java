@@ -2,6 +2,8 @@ package com.jerry.www.RecipeApp.service;
 
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import com.jerry.www.RecipeApp.commands.IngredientCommand;
@@ -18,18 +20,18 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class IngredientServiceImpl implements IngredientService {
 
-	private final RecipeRepository recipeRepository;
-	private final UnitOfMeasureRepository unitOfMeasureRepository;
 	private final IngredientToIngredientCommand ingredientToIngredientCommand;
 	private final IngredientCommandToIngredient ingredientCommandToIngredient;
+	private final RecipeRepository recipeRepository;
+	private final UnitOfMeasureRepository unitOfMeasureRepository;
 
-	public IngredientServiceImpl(RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository,
-			IngredientToIngredientCommand ingredientToIngredientCommand,
-			IngredientCommandToIngredient ingredientCommandToIngredient) {
-		this.recipeRepository = recipeRepository;
-		this.unitOfMeasureRepository = unitOfMeasureRepository;
+	public IngredientServiceImpl(IngredientToIngredientCommand ingredientToIngredientCommand,
+			IngredientCommandToIngredient ingredientCommandToIngredient, RecipeRepository recipeRepository,
+			UnitOfMeasureRepository unitOfMeasureRepository) {
 		this.ingredientToIngredientCommand = ingredientToIngredientCommand;
 		this.ingredientCommandToIngredient = ingredientCommandToIngredient;
+		this.recipeRepository = recipeRepository;
+		this.unitOfMeasureRepository = unitOfMeasureRepository;
 	}
 
 	@Override
@@ -51,35 +53,54 @@ public class IngredientServiceImpl implements IngredientService {
 		return ingredientCommandOptional.get();
 	}
 
+    @Override
+    @Transactional
+    public IngredientCommand saveIngredientCommand(IngredientCommand command) {
+        Optional<Recipe> recipeOptional = recipeRepository.findById(command.getRecipeId());
+        System.out.println("Igredient command" + command.toString());
+        log.debug("RecipeOptional");
+
+        if(!recipeOptional.isPresent()){
+
+            //todo toss error if not found!
+            log.error("Recipe not found for id: " + command.getRecipeId());
+            return new IngredientCommand();
+        } else {
+            Recipe recipe = recipeOptional.get();
+
+            Optional<Ingredient> ingredientOptional = recipe
+                    .getIngredients()
+                    .stream()
+                    .filter(ingredient -> ingredient.getId().equals(command.getId()))
+                    .findFirst();
+
+            if(ingredientOptional.isPresent()){
+                Ingredient ingredientFound = ingredientOptional.get();
+                ingredientFound.setDescription(command.getDescription());
+                ingredientFound.setAmount(command.getAmount());
+                ingredientFound.setUnitOfMeasure(unitOfMeasureRepository
+                        .findById(command.getUnitOfMeasure().getId())
+                        .orElseThrow(() -> new RuntimeException("UOM NOT FOUND"))); //todo address this
+            } else {
+                //add new Ingredient
+                recipe.addIngredient(ingredientCommandToIngredient.convert(command));
+            }
+
+            Recipe savedRecipe = recipeRepository.save(recipe);
+
+            //to do check for fail
+            return ingredientToIngredientCommand.convert(savedRecipe.getIngredients().stream()
+                    .filter(recipeIngredients -> recipeIngredients.getId().equals(command.getId()))
+                    .findFirst()
+                    .get());
+        }
+
+    }
+
 	@Override
-	public IngredientCommand saveIngredientCommand(IngredientCommand command) {
-		Optional<Recipe> recipeOptional = recipeRepository.findById(command.getRecipeId());
-
-		if (!recipeOptional.isPresent()) {
-			log.debug("Recipe not found for id = " + command.getRecipeId());
-			return new IngredientCommand();
-		} else {
-			Recipe recipe = recipeOptional.get();
-
-			Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
-					.filter(ingredient -> ingredient.getId().equals(command.getId())).findFirst();
-
-			if (ingredientOptional.isPresent()) {
-				Ingredient ingredientFound = ingredientOptional.get();
-				ingredientFound.setDescription(command.getDescription());
-				ingredientFound.setAmount(command.getAmount());
-				ingredientFound.setUnitOfMeasure(unitOfMeasureRepository.findById(command.getUnitOfMeasure().getId())
-						.orElseThrow(() -> new RuntimeException("UOM NOT Found")));
-			} else {
-				recipe.addIngredient(ingredientCommandToIngredient.convert(command));
-			}
-
-			Recipe savedRecipe = recipeRepository.save(recipe);
-
-			return ingredientToIngredientCommand.convert(savedRecipe.getIngredients().stream()
-					.filter(recipeIgredients -> recipeIgredients.getId().equals(command.getId())).findFirst().get());
-		}
-
+	public void deleteById(Long recipeId, Long idToDelete) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

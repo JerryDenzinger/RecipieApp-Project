@@ -24,7 +24,7 @@ import com.jerry.www.RecipeApp.service.IngredientService;
 import com.jerry.www.RecipeApp.service.RecipeService;
 import com.jerry.www.RecipeApp.service.UnitOfMeasureService;
 
-class IngredientControllerTest {
+public class IngredientControllerTest {
 	@Mock
 	RecipeService recipeService;
 
@@ -33,7 +33,8 @@ class IngredientControllerTest {
 
 	@Mock
 	UnitOfMeasureService unitOfMeasureService;
-
+	
+	@Mock
 	IngredientController controller;
 
 	MockMvc mockMvc;
@@ -100,7 +101,7 @@ class IngredientControllerTest {
 		// then
 		mockMvc.perform(get("/recipe/2/ingredient/3/delete"))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:recipe/2/ingredients"));
+				.andExpect(view().name("redirect:/recipe/2/ingredients"));
 		
 		verify(ingredientService).deleteById(anyLong(), anyLong());
 	}

@@ -30,19 +30,29 @@
 								Description Here!</h1>
 						</div>
 						<div class="panel-body">
-							<div class="row">
-								<div class="col-md-3">
-									<h5>Categories:</h5>
-								</div>
-								<div class="col-md-9">
-									<ul th:remove="all">
-										<li>cat one</li>
-										<li>cat two</li>
-										<li>cat three</li>
-									</ul>
-									<ul th:each="category : ${recipe.categories}">
-										<li th:text="${category.getCategoryName()}"></li>
-									</ul>
+							<div class="container">
+								<div class="row">
+									<div class="col-sm-3">
+										<h5>Categories:</h5>
+									</div>
+									<div class="col-sm-3">
+										<ul th:remove="all">
+											<li>cat one</li>
+											<li>cat two</li>
+											<li>cat three</li>
+										</ul>
+										<ul th:each="category : ${recipe.categories}">
+											<li th:text="${category.getCategoryName()}"></li>
+										</ul>
+									</div>
+									<div class="col-sm-3">
+										<img src="../../static/images/guacamole400x400WithX.jpg"
+											th:src="@{/images/guacamole400x400WithX.jpg}" width="200"
+											height="200"> <a class="btn btn-primary" href="#"
+											th:href="@{'/recipe/' + ${recipe.id} + '/image'}"
+											role="button">Change Image</a>
+									</div>
+
 								</div>
 							</div>
 							<div class="row">

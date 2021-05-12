@@ -13,7 +13,6 @@ import com.jerry.www.RecipeApp.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
 
 
-@Slf4j
 @Service
 public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
 

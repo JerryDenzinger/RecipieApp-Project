@@ -13,12 +13,19 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.jerry.www.RecipeApp.commands.UnitOfMeasureCommand;
+import com.jerry.www.RecipeApp.controllers.ImageController;
 import com.jerry.www.RecipeApp.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import com.jerry.www.RecipeApp.model.UnitOfMeasure;
 import com.jerry.www.RecipeApp.repositories.UnitOfMeasureRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 class UnitOfMeasureServiceImplTest {
+	@Mock
 	UnitOfMeasureToUnitOfMeasureCommand unitOfMeasureToUnitOfMeasureCommand;
+
+	@Mock
 	UnitOfMeasureService service;
 
 	@Mock
@@ -26,34 +33,34 @@ class UnitOfMeasureServiceImplTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-	MockitoAnnotations.openMocks(this);
-	
-	service = new UnitOfMeasureServiceImpl(unitOfMeasureRepository, unitOfMeasureToUnitOfMeasureCommand);
+		MockitoAnnotations.openMocks(this);
+
+		service = new UnitOfMeasureServiceImpl(unitOfMeasureRepository, unitOfMeasureToUnitOfMeasureCommand);
 	}
 
 	@Test
 	void listAllUomsTest() {
-		//given
+		// given
 		Set<UnitOfMeasure> unitOfMeasures = new HashSet<>();
 		UnitOfMeasure uom1 = new UnitOfMeasure();
 		uom1.setId(1L);
 		unitOfMeasures.add(uom1);
-		
+
 		UnitOfMeasure uom2 = new UnitOfMeasure();
-		uom1.setId(2L);
+		uom2.setId(2L);
 		unitOfMeasures.add(uom2);
-		
-		//when 
+		log.debug("unitofmeasures size " + unitOfMeasures.size());
+
+		// when
 		when(unitOfMeasureRepository.findAll()).thenReturn(unitOfMeasures);
-		
+
 		Set<UnitOfMeasureCommand> commands = service.listAllUoms();
-		
-		//then 
+
+		// then
+		log.debug("commands size " + commands.size());
 		assertEquals(2, commands.size());
 		verify(unitOfMeasureRepository).findAll();
-		
-		
-				
+
 	}
 
 }

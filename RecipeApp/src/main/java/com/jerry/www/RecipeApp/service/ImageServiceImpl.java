@@ -11,6 +11,8 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	public void saveImageFileToRecipeId(Long valueOf, MultipartFile file) {
+		
+		log.debug("Recived image");
 
 	}
 

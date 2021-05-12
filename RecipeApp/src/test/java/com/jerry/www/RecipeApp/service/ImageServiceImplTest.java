@@ -1,9 +1,11 @@
 package com.jerry.www.RecipeApp.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class RecipeServiceTest {
+class ImageServiceImplTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -11,6 +13,7 @@ class RecipeServiceTest {
 
 	@Test
 	void test() {
+		fail("Not yet implemented");
 	}
 
 }

@@ -4,6 +4,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageService {
 
-	void saveImageFileToRecipeId(Long valueOf, MultipartFile file);
+	void saveImageFileToRecipeId(Long recipeId, MultipartFile file);
 
 }

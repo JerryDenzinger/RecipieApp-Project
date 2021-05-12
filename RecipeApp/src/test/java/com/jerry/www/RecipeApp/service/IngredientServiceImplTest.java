@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.web.servlet.MockMvc;
 
 import com.jerry.www.RecipeApp.commands.IngredientCommand;
 import com.jerry.www.RecipeApp.converters.IngredientCommandToIngredient;
@@ -25,27 +26,29 @@ import com.jerry.www.RecipeApp.repositories.UnitOfMeasureRepository;
 
 class IngredientServiceImplTest {
 
-    private final IngredientToIngredientCommand ingredientToIngredientCommand;
-    private final IngredientCommandToIngredient ingredientCommandToIngredient;
+	private final IngredientToIngredientCommand ingredientToIngredientCommand;
+	private final IngredientCommandToIngredient ingredientCommandToIngredient;
 
-    @Mock
-    RecipeRepository recipeRepository;
+	@Mock
+	RecipeRepository recipeRepository;
 
-    @Mock
-    UnitOfMeasureRepository unitOfMeasureRepository;
+	@Mock
+	UnitOfMeasureRepository unitOfMeasureRepository;
 
-    IngredientService ingredientService;
+	IngredientService ingredientService;
 
 	public IngredientServiceImplTest() {
-		this.ingredientToIngredientCommand = new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand());
-		this.ingredientCommandToIngredient = new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure());
+		this.ingredientToIngredientCommand = new IngredientToIngredientCommand(
+				new UnitOfMeasureToUnitOfMeasureCommand());
+		this.ingredientCommandToIngredient = new IngredientCommandToIngredient(
+				new UnitOfMeasureCommandToUnitOfMeasure());
 	}
 
 	@BeforeEach
 	void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
-		ingredientService = new IngredientServiceImpl(ingredientToIngredientCommand,
-				ingredientCommandToIngredient, recipeRepository, unitOfMeasureRepository);
+		ingredientService = new IngredientServiceImpl(ingredientToIngredientCommand, ingredientCommandToIngredient,
+				recipeRepository, unitOfMeasureRepository);
 
 	}
 
@@ -111,6 +114,26 @@ class IngredientServiceImplTest {
 		verify(recipeRepository).findById(anyLong());
 		verify(recipeRepository).save(any(Recipe.class));
 
+	}
+
+	@Test
+	public void deleteInredientFromRecipeTest() throws Exception {
+		//given 
+		Recipe recipe = new Recipe();
+		Ingredient ingredient = new Ingredient();
+		ingredient.setId(3L);
+		recipe.addIngredient(ingredient);
+		ingredient.setRecipe(recipe);
+		Optional<Recipe> recipeOptional = Optional.of(new Recipe());
+
+		//when 
+		when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+		
+		ingredientService.deleteById(1L, 3L);
+		
+		//Then 
+		verify(recipeRepository).findById(anyLong());
+		verify(recipeRepository).save(any(Recipe.class));
 	}
 
 }

@@ -26,74 +26,69 @@ import com.jerry.www.RecipeApp.service.RecipeService;
 public class ImageControllerTest {
 	@Mock
 	ImageService imageservice;
-	
+
 	@Mock
 	RecipeService recipeService;
-	
+
 	ImageController controller;
-	
+
 	MockMvc mockMvc;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
-		
+
 		controller = new ImageController(imageservice, recipeService);
 		mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 	}
-	
+
 	@Test
-	public void getFormToUploadImageTest() throws Exception{
-		//given 
+	public void getFormToUploadImageTest() throws Exception {
+		// given
 		RecipeCommand command = new RecipeCommand();
 		command.setId(1L);
-		
-		//when 
+
 		when(recipeService.findCommandById(anyLong())).thenReturn(command);
-		
-		mockMvc.perform(get("/recipe/1/image"))
-		.andExpect(status().isOk())
-		.andExpect(model().attributeExists("recipe"));
-		
+
+		// when
+		mockMvc.perform(get("/recipe/1/image")).andExpect(status().isOk()).andExpect(model().attributeExists("recipe"));
+
 		verify(recipeService).findCommandById(anyLong());
 	}
 
 	@Test
-	public void handleImagePostTest() throws Exception{
-		MockMultipartFile multipartFile = 
-				new MockMultipartFile("imagefile","testing.txt","text/plain","Spring Frmework".getBytes());
-		
-		this.mockMvc.perform(multipart("/recipe/1/image").file(multipartFile))
-		.andExpect(status().is3xxRedirection())
-		.andExpect(header().string("Location", "/recipe/1/show"));
+	public void handleImagePostTest() throws Exception {
+		MockMultipartFile multipartFile = new MockMultipartFile("imagefile", "testing.txt", "text/plain",
+				"Spring Frmework".getBytes());
+
+		this.mockMvc.perform(multipart("/recipe/1/image").file(multipartFile)).andExpect(status().is3xxRedirection())
+				.andExpect(header().string("Location", "/recipe/1/show"));
 	}
-	
-	
-	@Test 
+
+	@Test
 	public void renderImageFromDbTest() throws Exception {
+		// given
 		RecipeCommand command = new RecipeCommand();
 		command.setId(1L);
-		
+
 		String s = "fake image text";
 		Byte[] byteBoxed = new Byte[s.getBytes().length];
-		
+
 		int i = 0;
-		
-		for(byte primByte : s.getBytes()) {
+
+		for (byte primByte : s.getBytes()) {
 			byteBoxed[i++] = primByte;
 		}
 		command.setImage(byteBoxed);
-		
+
 		when(recipeService.findCommandById(anyLong())).thenReturn(command);
-		
-		//when 
-		MockHttpServletResponse response = mockMvc.perform(get("/recipe/1/image"))
-				.andExpect(status().isOk())
+
+		// when
+		MockHttpServletResponse response = mockMvc.perform(get("/recipe/1/recipeimage")).andExpect(status().isOk())
 				.andReturn().getResponse();
-		
-		
+
 		byte[] responseBytes = response.getContentAsByteArray();
 		assertEquals(s.getBytes().length, responseBytes.length);
 	}
-	
+
 }

@@ -24,6 +24,10 @@ import com.jerry.www.RecipeApp.service.IngredientService;
 import com.jerry.www.RecipeApp.service.RecipeService;
 import com.jerry.www.RecipeApp.service.UnitOfMeasureService;
 
+import jdk.internal.org.jline.utils.Log;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class IngredientControllerTest {
 	@Mock
 	RecipeService recipeService;
@@ -77,6 +81,8 @@ public class IngredientControllerTest {
 
 	@Test
 	void getNewIngredientFormTest() throws Exception {
+		
+		log.debug("getNewIngredientFormTest--------------------------------------------");
         //given
         RecipeCommand recipeCommand = new RecipeCommand();
         recipeCommand.setId(1L);

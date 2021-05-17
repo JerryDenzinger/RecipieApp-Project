@@ -24,6 +24,10 @@ import com.jerry.www.RecipeApp.model.Recipe;
 import com.jerry.www.RecipeApp.repositories.RecipeRepository;
 import com.jerry.www.RecipeApp.repositories.UnitOfMeasureRepository;
 
+import jdk.internal.org.jline.utils.Log;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 class IngredientServiceImplTest {
 
 	private final IngredientToIngredientCommand ingredientToIngredientCommand;
@@ -34,6 +38,8 @@ class IngredientServiceImplTest {
 
 	@Mock
 	UnitOfMeasureRepository unitOfMeasureRepository;
+	
+	RecipeService recipeService;
 
 	IngredientService ingredientService;
 
@@ -121,9 +127,13 @@ class IngredientServiceImplTest {
 		//given 
 		Recipe recipe = new Recipe();
 		Ingredient ingredient = new Ingredient();
+		recipe.setId(1L);
 		ingredient.setId(3L);
 		recipe.addIngredient(ingredient);
 		ingredient.setRecipe(recipe);
+		recipeRepository.save(recipe);
+		log.debug("recipe from test = " + recipe.toString() + "ingredients " + recipe.getIngredients().isEmpty());
+		
 		Optional<Recipe> recipeOptional = Optional.of(new Recipe());
 
 		//when 

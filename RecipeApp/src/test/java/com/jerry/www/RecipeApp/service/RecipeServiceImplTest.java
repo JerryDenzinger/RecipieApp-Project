@@ -4,6 +4,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -16,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.jerry.www.RecipeApp.converters.RecipeCommandToRecipe;
 import com.jerry.www.RecipeApp.converters.RecipeToRecipeCommand;
+import com.jerry.www.RecipeApp.exceptions.NotFoundException;
 import com.jerry.www.RecipeApp.model.Recipe;
 import com.jerry.www.RecipeApp.repositories.RecipeRepository;
 
@@ -37,6 +40,25 @@ public class RecipeServiceImplTest {
 		MockitoAnnotations.openMocks(this);
 
 		recipeService = new RecipeServiceImpl(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
+	}
+	
+	@Test
+	public void getRecipeByIdNOtFoudTest() throws Exception {
+		Exception exception = assertThrows(NotFoundException.class,() ->{
+			Optional<Recipe> recipeOptional = Optional.empty();
+			
+			when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+			
+			Recipe recipeReturned = recipeService.findById(1l);
+		});
+		
+		String expectedMessage = "";
+		String actualMessage = exception.getMessage();
+		
+		assertTrue(actualMessage.contains(expectedMessage));
+
+		
+		
 	}
 
 	@Test

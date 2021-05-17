@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.jerry.www.RecipeApp.commands.RecipeCommand;
+import com.jerry.www.RecipeApp.exceptions.NotFoundException;
 import com.jerry.www.RecipeApp.model.Recipe;
 import com.jerry.www.RecipeApp.service.RecipeService;
 
@@ -32,7 +33,9 @@ class RecipeControllerTest {
 	void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
 		controller = new RecipeController(recipeService);
-		mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(controller)
+								 .setControllerAdvice(new ControllerExceptionHandler())
+								 .build();
 	}
 
 	@Test
@@ -46,13 +49,36 @@ class RecipeControllerTest {
 				.andExpect(model().attributeExists("recipe"));
 
 	}
+	
+	@Test
+	void getRecipeNotFoundTest() throws Exception {
+		when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+		
+		mockMvc.perform(get("/recipe/1/show"))
+		.andExpect(status().isNotFound())
+		.andExpect(view().name("404error"));
+		
+	}
+	
+	
+	@Test
+	void getRecipeNumberFormatExceptionTest() throws Exception {
+
+		mockMvc.perform(get("/recipe/abc/show"))
+		.andExpect(status().isBadRequest())
+		.andExpect(view().name("400error"));
+		
+	}
 
 	@Test
 	public void getNewRecipeFormTest() throws Exception {
 		RecipeCommand command = new RecipeCommand();
 
-		mockMvc.perform(get("/recipe/new")).andExpect(status().isOk()).andExpect(view().name("recipe/recipeform"))
-				.andExpect(model().attributeExists("recipe"));
+		mockMvc.perform(get("/recipe/new"))
+		.andExpect(status().isOk())
+		.andExpect(view()
+		.name("recipe/recipeform"))
+		.andExpect(model().attributeExists("recipe"));
 	}
 
 	@Test
@@ -78,5 +104,7 @@ class RecipeControllerTest {
 		mockMvc.perform(get("/recipe/1/update")).andExpect(status().isOk()).andExpect(view().name("recipe/recipeform"))
 				.andExpect(model().attributeExists("recipe"));
 	}
+	
+	
 
 }

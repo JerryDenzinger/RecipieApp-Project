@@ -45,20 +45,27 @@ class UnitOfMeasureServiceImplTest {
 		UnitOfMeasure uom1 = new UnitOfMeasure();
 		uom1.setId(1L);
 		unitOfMeasures.add(uom1);
+		log.debug("unitofmeasures size " + unitOfMeasures.size());
 
 		UnitOfMeasure uom2 = new UnitOfMeasure();
 		uom2.setId(2L);
 		unitOfMeasures.add(uom2);
+		log.debug("unitofmeasures size " + unitOfMeasures.size());
+		
+		UnitOfMeasure uom3 = new UnitOfMeasure();
+		uom3.setId(3L);
+		unitOfMeasures.add(uom3);
 		log.debug("unitofmeasures size " + unitOfMeasures.size());
 
 		// when
 		when(unitOfMeasureRepository.findAll()).thenReturn(unitOfMeasures);
 
 		Set<UnitOfMeasureCommand> commands = service.listAllUoms();
+		System.out.println(commands.isEmpty());
 
 		// then
 		log.debug("commands size " + commands.size());
-		assertEquals(2, commands.size());
+		assertEquals(3, commands.size());
 		verify(unitOfMeasureRepository).findAll();
 
 	}

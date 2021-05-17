@@ -31,8 +31,7 @@ public class IngredientController {
 		this.unitOfMeasureService = unitOfMeasureService;
 	}
 
-	@GetMapping
-	@RequestMapping("recipe/{id}/ingredients")
+	@GetMapping("recipe/{id}/ingredients")
 	public String getListOfIngredients(@PathVariable String id, Model model) {
 		log.debug("Showing List of ingredients from recipe ID= " + id);
 
@@ -42,8 +41,7 @@ public class IngredientController {
 		return "recipe/ingredient/list";
 	}
 
-	@GetMapping
-	@RequestMapping("recipe/{recipeId}/ingredient/{ingredientId}/show")
+	@GetMapping("recipe/{recipeId}/ingredient/{ingredientId}/show")
 	public String getIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
 		log.debug("Showing ingredient with Id = " + ingredientId + " from recipe with id " + recipeId);
 
@@ -53,17 +51,20 @@ public class IngredientController {
 		return "recipe/ingredient/show";
 	}
 
-	@GetMapping
-	@RequestMapping("recipe/{recipeId}/ingredient/new")
-	public String newRecipe(@PathVariable String recipeId, Model model) {
+	@GetMapping("recipe/{recipeId}/ingredient/new")
+	public String newIngredient(@PathVariable String recipeId, Model model) {
+		
+		log.debug("Showing Form for New ingredient");
 
 		// make sure we have a good id value
 		RecipeCommand recipeCommand = recipeService.findCommandById(Long.valueOf(recipeId));
+		log.debug(recipeCommand.getId().toString());
 		// todo raise exception if null
 
 		// need to return back parent id for hidden form property
 		IngredientCommand ingredientCommand = new IngredientCommand();
-		ingredientCommand.setRecipeId(Long.valueOf(recipeId));
+		ingredientCommand.setRecipeId(Long.valueOf(recipeId));		
+		log.debug(ingredientCommand.getId().toString());
 		model.addAttribute("ingredient", ingredientCommand);
 
 		// init uom
@@ -74,8 +75,7 @@ public class IngredientController {
 		return "recipe/ingredient/ingredientform";
 	}
 
-	@GetMapping
-	@RequestMapping("recipe/{recipeId}/ingredient/{ingredientId}/update")
+	@GetMapping("recipe/{recipeId}/ingredient/{ingredientId}/update")
 	public String updateIgredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
 		log.debug("Update ingredient with Id = " + ingredientId + " from recipe with id " + recipeId);
 
@@ -88,8 +88,7 @@ public class IngredientController {
 
 	}
 
-	@GetMapping
-	@RequestMapping("recipe/{recipeId}/ingredient/{ingredientId}/delete")
+	@GetMapping("recipe/{recipeId}/ingredient/{ingredientId}/delete")
 	public String deleteIgredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
 		log.debug("Delete ingredient with Id = " + ingredientId + " from recipe with id " + recipeId);
 

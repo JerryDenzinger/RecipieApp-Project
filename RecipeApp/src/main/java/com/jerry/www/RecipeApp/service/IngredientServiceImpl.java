@@ -37,6 +37,7 @@ public class IngredientServiceImpl implements IngredientService {
 	@Override
 	public IngredientCommand findByRecipeIdAndIngredientId(Long recipeId, Long ingredientId) {
 		Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+		
 		if (!recipeOptional.isPresent()) {
 			throw new RuntimeException("Recipe Not Found");
 		}
@@ -106,13 +107,14 @@ public class IngredientServiceImpl implements IngredientService {
 
 	@Override
 	public void deleteById(Long recipeId, Long idToDelete) {
-		log.debug("deleteing ingredient id "+ idToDelete +" from recipe id = " + recipeId );
+		log.debug("Deleteing ingredient id "+ idToDelete +" from recipe id = " + recipeId );
 		
 		Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
 		
 		if(recipeOptional.isPresent()) {
 			Recipe recipe = recipeOptional.get();
-			log.debug("Found recipe");
+			log.debug("Found recipe -------------------");
+			
 			
 			Optional<Ingredient> ingredientOptional = recipe
 					.getIngredients()
@@ -121,11 +123,14 @@ public class IngredientServiceImpl implements IngredientService {
 					.findFirst();
 			
 			if(ingredientOptional.isPresent()) {
-				log.debug("ingredient found");
+				log.debug("Found ingredient --------------------");
 				Ingredient ingredientToDelete = ingredientOptional.get();
 				ingredientToDelete.setRecipe(null);
 				recipe.getIngredients().remove(ingredientOptional.get());
 				recipeRepository.save(recipe);
+				log.debug("Recipe after delete ingredient saved");
+			}else {
+				log.debug("ingrediet with id " + idToDelete + " not found");
 			}
 		}else {
 			log.debug("Recipe not found id = " + recipeId);

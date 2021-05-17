@@ -16,6 +16,11 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+
+import org.hibernate.validator.constraints.URL;
 
 import lombok.Data;
 
@@ -26,13 +31,27 @@ public class Recipe {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
+	
+	@NotBlank
 	private String description;
+ 
+	@Min(1)
+	@Max(999)
 	private Integer prepTime;
+	
+	@Min(1)
+	@Max(999)
 	private Integer cookTime;
+	
+	@Min(1)
+	@Max(999)
 	private Integer servings;
 	private String source;
+	
+	@URL
 	private String url;
+	
+	@NotBlank
 	@Lob
 	private String directions;
 

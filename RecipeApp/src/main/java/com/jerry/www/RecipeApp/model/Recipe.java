@@ -28,58 +28,45 @@ import lombok.Data;
 @Entity
 public class Recipe {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@NotBlank
-	private String description;
- 
-	@Min(1)
-	@Max(999)
-	private Integer prepTime;
-	
-	@Min(1)
-	@Max(999)
-	private Integer cookTime;
-	
-	@Min(1)
-	@Max(999)
-	private Integer servings;
-	private String source;
-	
-	@URL
-	private String url;
-	
-	@NotBlank
-	@Lob
-	private String directions;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-	private Set<Ingredient> ingredients = new HashSet<>();
+    private String description;
+    private Integer prepTime;
+    private Integer cookTime;
+    private Integer servings;
+    private String source;
+    private String url;
 
-	@Lob
-	private Byte[] image;
+    @Lob
+    private String directions;
 
-	@Enumerated(value = EnumType.STRING)
-	private Difficulty difficulty;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    private Set<Ingredient> ingredients = new HashSet<>();
 
-	@OneToOne(cascade = CascadeType.ALL)
-	private Notes notes;
+    @Lob
+    private Byte[] image;
 
-	@ManyToMany
-	@JoinTable(name = "recipe_category",
-	joinColumns = @JoinColumn(name = "recipe_id"), 
-	inverseJoinColumns = @JoinColumn(name = "category_id"))
-	private Set<Category> categories = new HashSet<>();
+    @Enumerated(value = EnumType.STRING)
+    private Difficulty difficulty;
 
-	public void setNotes(Notes notes) {
-		if (notes != null) {
-			this.notes = notes;
-			notes.setRecipe(this);
-		}
-	}
-	
+    @OneToOne(cascade = CascadeType.ALL)
+    private Notes notes;
+
+    @ManyToMany
+    @JoinTable(name = "recipe_category",
+        joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories = new HashSet<>();
+
+    public void setNotes(Notes notes) {
+        if (notes != null) {
+            this.notes = notes;
+            notes.setRecipe(this);
+        }
+    }
+
     public Recipe addIngredient(Ingredient ingredient){
         ingredient.setRecipe(this);
         this.ingredients.add(ingredient);

@@ -38,6 +38,7 @@
 										<th>View</th>
 										<th>Update</th>
 										<th>Delete</th>
+										<th>Copy</th>
 									</tr>
 								</thead>
 								<tr th:remove="all">
@@ -57,11 +58,13 @@
 										th:href="@{'/recipe/' + ${recipe.id} + '/update'}">Update</a></td>
 									<td><a href="#"
 										th:href="@{'/recipe/' + ${recipe.id} + '/delete'}">Delete</a></td>
+									<td><a href="#"
+										th:href="@{'/recipe/' + ${recipe.id} + '/copy'}">Copy</a></td>
 								</tr>
 							</table>
 						</div>
-						<a href="#" th:href="@{'/recipe/new'}"
-							class="btn btn-primary" role="button">New</a>
+						<a href="#" th:href="@{'/recipe/new'}" class="btn btn-primary"
+							role="button">New</a>
 					</div>
 				</div>
 			</div>

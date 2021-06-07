@@ -159,6 +159,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
 		// add to return list
 		recipes.add(guacRecipe);
+		
+		log.debug("Added recipe 1-----------------------------");
 
 		// Yummy Tacos
 		Recipe tacosRecipe = new Recipe();
@@ -217,6 +219,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		tacosRecipe.setCookTime(10);
 
 		recipes.add(tacosRecipe);
+		
+		log.debug("Added recipe 2-----------------------------");
 		return recipes;
 
 	}

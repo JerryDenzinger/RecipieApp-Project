@@ -41,11 +41,21 @@ public class RecipeController {
 	
 	@GetMapping("recipe/new")
 	public String getNewRecipeForm(Model model) {
-		log.debug("Recipe Controller recipe form ");
+		log.debug("Recipe Controller recipe form new ");
 		model.addAttribute("recipe", new RecipeCommand());
-		return "recipe/recipeform";
+		return RECIPE_RECIPEFORM_URL;
 
 	}
+	
+	@GetMapping("recipe/{id}/copy")
+	public String getCopyFromRecipe(@PathVariable String id,Model model) {
+		log.debug("Recipe Controller recipe form copy");
+		model.addAttribute("recipe" , recipeService.findCommandById(Long.valueOf(id)));
+		model.addAttribute("recipeCopy", new RecipeCommand());
+		return "recipe/recipeCopyform";
+
+	}
+	
 	
 	@GetMapping("recipe/{id}/update")
 	public String updateRecipe(@PathVariable String id,Model model) {
@@ -63,6 +73,12 @@ public class RecipeController {
 	
 	@PostMapping("recipe")
 	public String saveOrUpdate(@Valid @ModelAttribute ("recipe") RecipeCommand command, BindingResult bindingResult) {
+		if(command.getId() != null) {
+		log.debug(command.getId().toString());
+		}
+		else {
+			log.debug("Command getId() = null");
+		}
 		if (bindingResult.hasErrors()) {
 			bindingResult.getAllErrors().forEach(objectError -> {
 				log.debug(objectError.toString());
